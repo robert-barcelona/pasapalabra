@@ -7,6 +7,10 @@ const ENTER_KEY = 13;
 const LETTER_NORMAL_CLASS = "letterNormal";
 let canPlayFlag = true;
 
+function cleanString(str) {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+}
+
 
 class QuestionGenerator {
     constructor() {
@@ -16,14 +20,14 @@ class QuestionGenerator {
                 answer: "abducir",
 
                 status: 0,
-                question: [("CON LA A. Dicho de una supuesta criatura extraterrestre: Apoderarse de alguien"), ("CON LA A. 2 Dicho de una supuesta criatura extraterrestre: Apoderarse de alguien"), ("CON LA A. 3Dicho de una supuesta criatura extraterrestre: Apoderarse de alguien")]
+                question: [("CON LA A. Dicho de una supuesta criatura extraterrestre: Apoderarse de alguien"), ("CON LA A. Dicho de una supuesta criatura extraterrestre: Apoderarse de alguien"), ("CON LA A. Dicho de una supuesta criatura extraterrestre: Apoderarse de alguien")]
             },
             {
                 letter: "b",
                 answer: "bingo",
 
                 status: 0,
-                question: [("CON LA B. Juego que ha sacado de quicio a todos los 'Skylabers' en las sesiones de precurso"), ("CON LA B. 2 Juego que ha sacado de quicio a todos los 'Skylabers' en las sesiones de precurso"), ("CON LA B. 3 Juego que ha sacado de quicio a todos los 'Skylabers' en las sesiones de precurso")]
+                question: [("CON LA B. Juego que ha sacado de quicio a todos los 'Skylabers' en las sesiones de precurso"), ("CON LA B. Juego que ha sacado de quicio a todos los 'Skylabers' en las sesiones de precurso"), ("CON LA B. Juego que ha sacado de quicio a todos los 'Skylabers' en las sesiones de precurso")]
             },
             {
                 letter: "c",
@@ -49,7 +53,7 @@ class QuestionGenerator {
             },
             {
                 letter: "f",
-                answer: "facil",
+                answer: "fácil",
 
                 status: 0,
                 question: [("CON LA F. Que no requiere gran esfuerzo, capacidad o dificultad"), ("CON LA F. Que no requiere gran esfuerzo, capacidad o dificultad"), ("CON LA F. Que no requiere gran esfuerzo, capacidad o dificultad")]
@@ -239,8 +243,8 @@ class QuestionGenerator {
             logBad(`checkAnswer: Error, matching question not found for letter ${letter}`);
             return;
         }
-
-        return answer === matchingQuestion.answer;
+        const cleanAnswer = cleanString(matchingQuestion.answer);
+        return answer === cleanAnswer;
     }
 
     reInit() {
@@ -273,9 +277,9 @@ const tablero = {
             this.letterDisplay.appendChild(diva);
             diva.classList.add(LETTER_NORMAL_CLASS);
             diva.innerHTML = "<span>" + letter.toUpperCase() + "</span>";
-            let {x, y} = this.returnCoords(origin.x, origin.y, this.degreesToRad((360 / count) * i), radius);
-            let width = window.getComputedStyle(diva).getPropertyValue('width');
-            let height = window.getComputedStyle(diva).getPropertyValue('height');
+            const {x, y} = this.returnCoords(origin.x, origin.y, this.degreesToRad((360 / count) * i), radius);
+            const width = window.getComputedStyle(diva).getPropertyValue('width');
+            const height = window.getComputedStyle(diva).getPropertyValue('height');
             diva.style.left = x - Number.parseFloat(width) + "px";
             diva.style.top = y - Number.parseFloat(height) + "px";
         }
@@ -405,6 +409,10 @@ class UserInteraction {
             this.clearMessage()
         }
         this.input.value = "";
+        this.focus();
+    }
+
+    focus() {
         this.input.focus();
     }
 
@@ -589,19 +597,34 @@ class Animation {
 
         let tmparr = this.arrayWithLetterAtStart(letter);
 
-        const tweenTime = .25;
+        const tweenTime = .45;
         const staggerTime = .05;
 
         tmparr = tmparr.concat(tmparr.slice(0, 1));
 
-
+/*
         const tweens = TweenMax.staggerTo(tmparr, tweenTime, {
             repeat: 1,
             className: "letterBig",
             yoyo: true,
             ease: Power1.easeInOut,
         }, staggerTime, callback, [], callbackContext);
-        tweens.pop().repeat(0);
+        tweens.pop().repeat(0);*/
+
+
+        const timeline = new TimelineMax({paused:true});
+
+        timeline.staggerTo(tmparr, tweenTime, {
+            repeat: 1,
+            className: "letterBig",
+            yoyo: true,
+            ease: Power1.easeInOut,
+        }, staggerTime,0, callback, [], callbackContext);
+        const tweens = timeline.getChildren();
+
+        tweens[tweens.length-1].repeat(0);
+        TweenMax.to(timeline, (tweens.length-2) * tweenTime* .15, { ease: CustomEase.create("custom", "M0,0 C0.108,0.204 0.479,0.9 1,1"),progress:1});
+
 
 
     }
@@ -648,15 +671,22 @@ class Game {
         this.rondaActual = this.RONDA_PRIMERA;
 
         this.questionIterable = null;
+
+        this.instrucciones = document.getElementById("instrucciones");
+        this.instruccionesButton = document.getElementById("instruccionesButton");
     }
 
     handleErr(err) {
         this.logBad(`Error! ${err}`);
     }
 
-    cleanString(str) {
-        return str.toLowerCase().trim();
+
+    dismissInstrucciones(_) {
+        this.instruccionesButton.removeEventListener('click',this.dismissInstrucciones);
+        this.userInteraction.focus();
+        TweenMax.to(this.instrucciones,0.25,{autoAlpha:0});
     }
+
 
     init() {
         this.qGenerator = new QuestionGenerator();
@@ -665,6 +695,7 @@ class Game {
         this.animation = new Animation(tablero);
         this.scoreboard = new Scoreboard();
         this.questionIterable = this.qGenerator.questionMaker(this.qGenerator.Q_UNANSWERED);
+        this.instruccionesButton.addEventListener('click',_=> {this.dismissInstrucciones()});
     }
 
     startGame() {
@@ -807,7 +838,7 @@ class Game {
             this.timedOutFlag = false;
         }
 
-        const answer = this.cleanString(result);
+        const answer = cleanString(result);
 
         const letter = this.currentQuestionData.letter;
 

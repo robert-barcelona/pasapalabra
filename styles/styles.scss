@@ -27,6 +27,32 @@ $letterBackground: rgba(151, 10, 150, .85);
   border: solid 1px rgba(0, 255, 100, 0.6);
 }
 
+%diagBlue {
+  background: rgb(208, 228, 247); /* Old browsers */
+  background: -moz-linear-gradient(-45deg, rgba(208, 228, 247, 1) 0%, rgba(115, 177, 231, 1) 24%, rgba(10, 119, 213, 1) 50%, rgba(83, 159, 225, 1) 79%, rgba(135, 188, 234, 1) 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(-45deg, rgba(208, 228, 247, 1) 0%, rgba(115, 177, 231, 1) 24%, rgba(10, 119, 213, 1) 50%, rgba(83, 159, 225, 1) 79%, rgba(135, 188, 234, 1) 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(135deg, rgba(208, 228, 247, 1) 0%, rgba(115, 177, 231, 1) 24%, rgba(10, 119, 213, 1) 50%, rgba(83, 159, 225, 1) 79%, rgba(135, 188, 234, 1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#d0e4f7', endColorstr='#87bcea', GradientType=1); /* IE6-9 fallback on horizontal gradient */
+}
+
+%button {
+  cursor: pointer;
+  border-radius: 5%;
+  width: 150px;
+  height: 40px;
+  text-align: center;
+  background-color: $greenish;
+  color: white;
+  border: white solid .9px;
+  font-size: .75em;
+  margin-top: 15px;
+  &:hover, &:active {
+    border-color: rgba(255, 234, 0, 0.9);
+    color: rgba(255, 234, 0, 0.9);
+
+  }
+}
+
 .textSnazz {
   @extend %text-snazz;
   display: inline-block;
@@ -45,7 +71,7 @@ $letterBackground: rgba(151, 10, 150, .85);
 
 .letterCorrect {
   border: $letterBorderPartial rgba(0, 255, 100, 0.8);
-  background-color: rgba(1, 255, 155, .5);
+  background-color: rgba(1, 255, 155, .8);
 }
 
 .letterIncorrect {
@@ -84,17 +110,71 @@ body {
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
   background-color: skyblue;
+  overflow-x: hidden;
+  overflow-y: hidden;
 
   font-family: $mainFont;
   border: 12px solid rgba(27, 129, 46, 0.87);
   padding: 0;
   margin: 0;
   display: grid;
-  height: 100%;;
+  height: 100%;
+
   grid-template-rows: 70px 1fr;
   grid-template-columns: 640px 1fr;
   grid-gap: 5px;
   grid-template-areas: "pageHeader pageHeader " "letterDisplay userInteraction ";
+}
+
+#instrucciones {
+  em {
+    font-family: 'Faster One', cursive;
+    font-size: 8vh;
+    display: block;
+    text-align: center;
+    margin-bottom: 1em;
+    @extend %text-snazz;
+  }
+  button {
+    @extend %button;
+    font-size:1.5em;
+
+  }
+  div {
+    font-size:1.2em;
+    background-image:url("../images/Totoro.png");
+    background-attachment: fixed;
+    background-position: 80% 50%;
+    background-repeat: no-repeat;
+    padding:1em;
+    span, ul {
+      margin-right:30%;
+    }
+    ul {
+      li:nth-child(even) {
+        color: $greenish;
+      }
+    }
+
+  }
+
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+background-position: left top;
+  z-index: 44;
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  border: white groove 2px;
+  border-radius: 1%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  @extend %diagBlue;
 }
 
 #letter-display {
@@ -124,21 +204,7 @@ body {
   grid-template-areas: "userOutput" "userInput";
 
   button {
-    cursor: pointer;
-    border-radius: 5%;
-    width: 150px;
-    height: 40px;
-    text-align: center;
-    background-color: $greenish;
-    color: white;
-    border: white solid .9px;
-    font-size: .75em;
-    margin-top: 15px;
-    &:hover, &:active {
-      border-color: rgba(255, 234, 0, 0.9);
-      color: rgba(255, 234, 0, 0.9);
-
-    }
+    @extend %button;
   }
 
   .buttonHidden {
@@ -256,7 +322,7 @@ body {
     border-radius: 50%;
     @extend %text-snazz;
     border-style: solid;
-    border-size:2px;
+    border-size: 2px;
     justify-content: center;
     align-items: center;
     cursor: pointer;
@@ -266,9 +332,9 @@ body {
     > div {
       color: black;
       &:hover, &:active {
-        color:white;
+        color: white;
       }
-      }
+    }
 
   }
 }

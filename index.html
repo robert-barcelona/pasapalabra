@@ -12,6 +12,27 @@
 
 </head>
 <body>
+<div id="instrucciones">
+    <div id="instruccionesContainer">
+    <em>¡Bienvenido a Pasapalabra!</em>
+    <span>El juego es sencillo.  Hay que adivinar palabras, una palabra para cada letra del alfabeto.</span>
+    <ul>
+        <li>Lee la pregunta y intenta responder con la palabra que corresponda. No tienes que fijarte en diacríticos
+        </li>
+        <li>Tienes 2 minutos para responder</li>
+        <li>Si quieres guardar la palabra para la segundo ronda, toca el botón "Pasapalabra". No puedes hacerlo en la
+            segunda ronda.
+        </li>
+        <li>Acumulas un punto para cada palabra acertada. Verás tu resultado al fin del partido</li>
+        <li>Puedes jugar más que una vez</li>
+        <li>Puedes salir del partido a caulquier momento tocando el botón "Salir". No puedes jugar otra vez después de
+            salir del juego antes
+        </li>
+    </ul>
+    <span>¡Disfruta!</span>
+    </div>
+    <button id="instruccionesButton">Entiendo</button>
+</div>
 <header id="pageHeader">Pasapalabra</header>
 <div id="letter-display">
 
@@ -41,8 +62,11 @@
     </div>
 
 </aside>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.1/TweenMax.min.js"></script>
 
-<script src="js/main.js"></script>
+<script src="./js/minified/easing/CustomEase.min.js"></script>
+<script src="./js/minified/TimelineMax.min.js"></script>
+<script src="./js/minified/TweenMax.min.js"></script>
+
+<script src="./js/main.js"></script>
 </body>
 </html>

@@ -9,9 +9,36 @@ font-family: 'Bad Script', cursive;
 font-family: 'Fira Mono', monospace;
 
 */
-.textSnazz, #scoreBoard #cerrar {
+.textSnazz, #instrucciones em, #scoreBoard #cerrar {
   background: rgba(0, 255, 21, 0.58);
   border: solid 1px rgba(0, 255, 100, 0.6); }
+
+#instrucciones {
+  background: #d0e4f7;
+  /* Old browsers */
+  background: -moz-linear-gradient(-45deg, #d0e4f7 0%, #73b1e7 24%, #0a77d5 50%, #539fe1 79%, #87bcea 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(-45deg, #d0e4f7 0%, #73b1e7 24%, #0a77d5 50%, #539fe1 79%, #87bcea 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(135deg, #d0e4f7 0%, #73b1e7 24%, #0a77d5 50%, #539fe1 79%, #87bcea 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#d0e4f7', endColorstr='#87bcea', GradientType=1);
+  /* IE6-9 fallback on horizontal gradient */ }
+
+#instrucciones button, #user-interaction button {
+  cursor: pointer;
+  border-radius: 5%;
+  width: 150px;
+  height: 40px;
+  text-align: center;
+  background-color: rgba(1, 255, 53, 0.65);
+  color: white;
+  border: white solid .9px;
+  font-size: .75em;
+  margin-top: 15px; }
+  #instrucciones button:hover, #user-interaction button:hover, #instrucciones button:active, #user-interaction button:active {
+    border-color: rgba(255, 234, 0, 0.9);
+    color: rgba(255, 234, 0, 0.9); }
 
 .textSnazz {
   display: inline-block;
@@ -27,7 +54,7 @@ font-family: 'Fira Mono', monospace;
 
 .letterCorrect {
   border: double 1px rgba(0, 255, 100, 0.8);
-  background-color: rgba(1, 255, 155, 0.5); }
+  background-color: rgba(1, 255, 155, 0.8); }
 
 .letterIncorrect {
   border: double 1px rgba(255, 100, 0, 0.8);
@@ -57,6 +84,8 @@ body {
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
   background-color: skyblue;
+  overflow-x: hidden;
+  overflow-y: hidden;
   font-family: "Open Sans", sans-serif;
   border: 12px solid rgba(27, 129, 46, 0.87);
   padding: 0;
@@ -67,6 +96,43 @@ body {
   grid-template-columns: 640px 1fr;
   grid-gap: 5px;
   grid-template-areas: "pageHeader pageHeader " "letterDisplay userInteraction "; }
+
+#instrucciones {
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: left top;
+  z-index: 44;
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  border: white groove 2px;
+  border-radius: 1%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; }
+  #instrucciones em {
+    font-family: 'Faster One', cursive;
+    font-size: 8vh;
+    display: block;
+    text-align: center;
+    margin-bottom: 1em; }
+  #instrucciones button {
+    font-size: 1.5em; }
+  #instrucciones div {
+    font-size: 1.2em;
+    background-image: url("../images/Totoro.png");
+    background-attachment: fixed;
+    background-position: 80% 50%;
+    background-repeat: no-repeat;
+    padding: 1em; }
+    #instrucciones div span, #instrucciones div ul {
+      margin-right: 30%; }
+    #instrucciones div ul li:nth-child(even) {
+      color: rgba(1, 255, 53, 0.65); }
 
 #letter-display {
   grid-area: letterDisplay;
@@ -90,20 +156,6 @@ body {
   grid-area: userInteraction;
   grid-template-rows: 2fr 1fr;
   grid-template-areas: "userOutput" "userInput"; }
-  #user-interaction button {
-    cursor: pointer;
-    border-radius: 5%;
-    width: 150px;
-    height: 40px;
-    text-align: center;
-    background-color: rgba(1, 255, 53, 0.65);
-    color: white;
-    border: white solid .9px;
-    font-size: .75em;
-    margin-top: 15px; }
-    #user-interaction button:hover, #user-interaction button:active {
-      border-color: rgba(255, 234, 0, 0.9);
-      color: rgba(255, 234, 0, 0.9); }
   #user-interaction .buttonHidden {
     opacity: 0;
     visibility: hidden; }
